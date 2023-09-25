@@ -1,9 +1,9 @@
 from App.database import db
 from .user import User
 
-class CetlUser(User):
+class Staff(User):
     __mapper_args__ = {
-        "polymorphic_identity": "cetl",
+        "polymorphic_identity": "staff",
     }
 
     def __init__(self, name, email, password):
