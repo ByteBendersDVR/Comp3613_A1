@@ -8,9 +8,9 @@ class Review(db.Model):
 
     student = db.relationship(Student, backref='students')
 
-    def __init__(self, name):
-        name=self.name
-        karma=0
+    def __init__(self, review, student_id):
+        self.review = review
+        self.student_id=student_id
 
     def get_json(self):
         return{
