@@ -25,13 +25,13 @@ def get_user_page():
 @auth_views.route('/identify', methods=['GET'])
 @login_required
 def identify_page():
-    return jsonify({'message': f"username: {current_user.username}, id : {current_user.id}"})
+    return jsonify({'message': f"email: {current_user.email}, id : {current_user.id}"})
 
 
 @auth_views.route('/login', methods=['POST'])
 def login_action():
     data = request.form
-    user = login(data['username'], data['password'])
+    user = login(data['email'], data['password'])
     if user:
         login_user(user)
         return 'user logged in!'
@@ -40,7 +40,7 @@ def login_action():
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
     data = request.form
-    user = login(data['username'], data['password'])
+    user = login(data['email'], data['password'])
     return 'logged out!'
 
 '''
@@ -55,18 +55,18 @@ def get_users_action():
 @auth_views.route('/api/users', methods=['POST'])
 def create_user_endpoint():
     data = request.json
-    create_user(data['username'], data['password'])
-    return jsonify({'message': f"user {data['username']} created"})
+    create_user(data['email'], data['name'], data['password'])
+    return jsonify({'message': f"user {data['name']} created"})
 
 @auth_views.route('/api/login', methods=['POST'])
 def user_login_api():
   data = request.json
-  token = jwt_authenticate(data['username'], data['password'])
+  token = jwt_authenticate(data['email'], data['password'])
   if not token:
-    return jsonify(message='bad username or password given'), 401
+    return jsonify(message='bad email or password given'), 401
   return jsonify(access_token=token)
 
 @auth_views.route('/api/identify', methods=['GET'])
 @jwt_required()
 def identify_user_action():
-    return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
+    return jsonify({'message': f"email: {jwt_current_user.email}, id : {jwt_current_user.id}"})
