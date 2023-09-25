@@ -1,4 +1,5 @@
 from App.database import db
+from .student import Student
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
