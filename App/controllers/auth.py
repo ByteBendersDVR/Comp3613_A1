@@ -6,10 +6,15 @@ from App.models import User
 def jwt_authenticate(email, password):
   user = User.query.filter_by(email=email).first()
   if user and user.check_password(password):
-    return create_access_token(identity=username)
+    return create_access_token(identity=email)
   return None
 
 def login(email, password):
+
+    staff = Staff.query.filter_by(email=email).first()
+    if staff and staff.check_password(password):
+        return user
+
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
         return user
