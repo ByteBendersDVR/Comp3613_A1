@@ -4,10 +4,11 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable = False)
     karma = db.Column(db.Integer, nullable = False)
-
+    # studentID = db.Column(db.Integer, nullable = False, unique=True)
+    
     def __init__(self, name):
-        name=self.name
-        karma=0
+        self.name=name
+        self.karma=0
 
     def get_json(self):
         return{

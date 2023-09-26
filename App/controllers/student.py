@@ -6,7 +6,7 @@ def create_student(name):
     db.session.add(student)
     db.session.commit()
 
-    return
+    return student.id
 
 
 def get_all_students():
@@ -24,3 +24,16 @@ def change_karma(student_id, karma):
     db.session.commit()
 
     return
+
+# This takes the new_data from the request, checks which fields are in it and update
+# the appropriate field from the student object, given a student_id
+def update_student(student_id, new_data):
+    student = get_student(student_id)
+    
+    for field in ("name", "karma"):
+        if field in new_data:
+            setattr(student, field, new_data[field])
+
+    db.session.commit()
+
+    return True

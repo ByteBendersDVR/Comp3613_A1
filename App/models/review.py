@@ -3,7 +3,7 @@ from .student import Student
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    review = db.Column(db.String, nullable = False)
+    review = db.Column(db.String(250), nullable = False)
     student_id = db.Column(db.Integer, db.ForeignKey(Student.id), nullable=False)
     score = db.Column(db.Integer, nullable=False)
 

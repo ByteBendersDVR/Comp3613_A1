@@ -9,9 +9,9 @@ def get_review(student_id, review_id):
     return Review.query.filter_by(id=review_id, student_id=student_id).first()
 
 def add_review(review, student_id):
-    review = Review(review=review, student_id=student_id)
+    new_review = Review(review=review, student_id=student_id)
 
-    db.session.add(review)
+    db.session.add(new_review)
     db.session.commit()
 
     return
