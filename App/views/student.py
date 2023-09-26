@@ -39,7 +39,7 @@ def addStudent():
     return jsonify(message=(f'Student was created with id:{student}.')), 200
 
 # this updates a student, user must be logged in
-@student_views.route('/updatestudent/<int:id>'. methods=["PUT"])
+@student_views.route('/updatestudent/<int:id>', methods=["PUT"])
 @jwt_required()
 def updateStudent(id):
     data = request.response
