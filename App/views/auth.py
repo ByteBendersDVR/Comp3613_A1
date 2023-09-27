@@ -30,7 +30,7 @@ def identify_page():
 
 @auth_views.route('/login', methods=['POST'])
 def login_action():
-    data = request.form
+    data = request.json
     user = login(data['email'], data['password'])
     if user:
         login_user(user)
@@ -39,7 +39,7 @@ def login_action():
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():
-    data = request.form
+    data = request.json
     user = login(data['email'], data['password'])
     return 'logged out!'
 
