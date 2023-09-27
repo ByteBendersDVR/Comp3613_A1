@@ -23,7 +23,7 @@ def getParticularStudent(id):
     student = get_student(id)
 
     if student:
-        student_json = student.get_json()
+        students_json = students.get_json()
         return jsonify(students_json), 200
     
     return jsonify(message=(f'Student with id:{id} could not be found.')), 401
