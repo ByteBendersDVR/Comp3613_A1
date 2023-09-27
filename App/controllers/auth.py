@@ -13,7 +13,7 @@ def login(email, password):
 
     staff = Staff.query.filter_by(email=email).first()
     if staff and staff.check_password(password):
-        return user
+        return staff
 
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
