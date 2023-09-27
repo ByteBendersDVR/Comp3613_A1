@@ -11,7 +11,7 @@ from App.controllers import (
 
 review_views = Blueprint('review_views', __name__)
 
-@review_views.route('/review/<int:studentID', methods=["GET","POST"])
+@review_views.route('/review/<int:studentID>', methods=["GET","POST"])
 def add_review(studentID):
     if route.methods == "POST":
         data = request.json
