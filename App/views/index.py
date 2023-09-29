@@ -13,10 +13,8 @@ def init():
     db.drop_all()
     db.create_all()
     # need to create a student and a staff/admin
-    create_staff('bob@gmail.com','bob', 'bobpass')
-    create_user('bob2@gmail.com', 'bob2', 'bob2pass')
-    create_student('Richard')
-    
+    create_user('bob@gmail.com','bob', 'bobpass')
+    create_staff('tom@gmail.com', 'tom', 'tompass')
     return jsonify(message='db initialized!')
 
 @index_views.route('/health', methods=['GET'])
