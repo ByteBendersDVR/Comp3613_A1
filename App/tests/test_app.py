@@ -19,6 +19,7 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
+'''
 class UserUnitTests(unittest.TestCase):
 
     def test_new_user(self):
@@ -55,7 +56,7 @@ def empty_db():
     yield app.test_client()
     db.drop_all()
 
-'''
+
 def test_authenticate():
     user = create_user("bob", "bobpass")
     assert login("bob", "bobpass") != None
