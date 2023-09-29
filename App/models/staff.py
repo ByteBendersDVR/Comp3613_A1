@@ -10,4 +10,4 @@ class Staff(User):
         super().__init__(name, email, password)
 
     def get_json(self):
-        super().get_json()
+        return super().get_json()
