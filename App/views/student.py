@@ -42,7 +42,7 @@ def addStudent():
 @student_views.route('/updatestudent/<int:id>', methods=["PUT"])
 @jwt_required()
 def updateStudent(id):
-    data = request.response
+    data = request.json
 
     if update_student(id, data):
         return jsonify(message=(f'Student with id:{id} was updated.')), 200
