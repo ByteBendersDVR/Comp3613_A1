@@ -29,7 +29,7 @@ def get_all_users_json():
 def update_user(id, username):
     user = get_user(id)
     if user:
-        user.username = username
+        user.name = username
         db.session.add(user)
         return db.session.commit()
     return None
