@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from App.controllers import (
     get_reviews,
     get_review,
-    add_review,
+    create_review,
     update_score
 )
 
@@ -13,16 +13,19 @@ review_views = Blueprint('review_views', __name__)
 
 @review_views.route('/review/<int:studentID>', methods=["GET","POST"])
 def add_review(studentID):
-    if route.methods == "POST":
+    if request.method == "POST":
         data = request.json
-        add_review(data["review"], studentID)
+        review = data["review"]
         
+        # add_review(studentID, review)
+        create_review(review, studentID)
+
         return jsonify(message=(f'Review added for student {studentID}.')), 200
     
-    if route.methods == "GET":
+    if request.method == "GET":
         reviews = get_reviews(studentID)
 
-        reviews_json = [review.get_json for review in reviews]
+        reviews_json = [review.get_json() for review in reviews]
 
         return jsonify(reviews_json), 200
 
