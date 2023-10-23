@@ -14,7 +14,7 @@ def create_review(review, student_id):
     db.session.add(new_review)
     db.session.commit()
 
-    return
+    return new_review.id
 
 def update_score(review_id, score_point):
     review = Review.query.filter_by(id=review_id).first()

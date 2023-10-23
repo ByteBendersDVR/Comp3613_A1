@@ -7,7 +7,7 @@ class Staff(User):
     }
 
     def __init__(self, name, email, password):
-        super().__init__(name, email, password)
+        super().__init__(email, name, password)
 
     def get_json(self):
         return super().get_json()
