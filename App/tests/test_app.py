@@ -16,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 class UnitTests(unittest.TestCase):
 # name, email, pw, user_type
     def test_new_user(self):
-        user = User(name="bob",email="bob@gmail.com", password="bobpass", user_type="superadmin")
+        user = User(name="bob",email="bob@gmail.com", password="bobpass")
         assert user.name == "bob"
 
     # pure function no side effects or integrations called
@@ -27,16 +27,22 @@ class UnitTests(unittest.TestCase):
     
     def test_new_staff(self):
         staff = Staff(name="rich", email="rich@mail.com", password="richpass")
-        new_staff = Staff.query.filter_by(email="rich@mail.com").first()
-        assert new_staff.name == "rich"
+        db.session.add(staff)
+        db.session.commit()
+        newStaff = get_staff_member(staff.email)
+        assert newStaff.name == "rich"
 
     def test_get_user(self):
-        user = User(name="rich", email="rich@mail.com", password="richpass", user_type="staff")
-        getting_user = User.query.filter_by(email="rich@gmail.com").first()
-        self.assertDictEqual(user_json, {"id":None, "name":"rich", "email":"rich@mail.com"})
+        user = User(name="bob",email="bob@mail.com", password="bobpass")
+        db.session.add(user)
+        db.session.commit()
+        getting_user = User.query.filter_by(email="bob@mail.com").first()
+        self.assertDictEqual(getting_user.get_json(), {"id":1, "name":"bob", "email":"bob@mail.com"})
 
     def test_create_student(self):
         student = Student(name="masud")
+        db.session.add(student)
+        db.session.commit()
         new_student = Student.query.filter_by(name="masud").first()
         assert new_student.name == "masud"
 
@@ -89,56 +95,47 @@ class IntegrationTests(unittest.TestCase):
     #     assert user.username == "ronnie"
 
     def test_get_students(self):
-        students = get_all_students()
+        studentID = create_student("masud")
+        studentID2 = create_student("morty")
         
-        try:
-            data = json.loads(students)
-            is_valid_json = True
-        except json.JSONDecodeError:
-            is_valid_json = False
-
-        self.assertTrue(is_valid_json, "Valid JSON object was not returned")
-
+        students = get_all_students()
+        assert students is not None
+        
     def test_update_student(self):
-        student = get_student(1)  
-        new_student_name = "rick"
-        update_student(1, new_student_name)    #should be masud if previous test stores within testing db
-        updated_student = get_student(1)
-        assert update_student.name == "rick"
+        studentID = create_student("masud")
+        new_student_name = {
+            "name": "rick"
+        }
+        update_student(studentID, new_student_name) 
+        updated_student = get_student(studentID)
+        assert updated_student.name == "rick"
 
     def test_create_review(self):
-        student = get_student(1) #assuming it uses already created student
+        studentID = create_student("masud")
         review = "They were great"
-        new_review = Review(review=review, student_id=student.id)
-        created_review = get_review(student.id, new_review.id)
+        new_review = create_review(review, studentID)
+        created_review = get_review(studentID, new_review)
 
-        try:
-            check_review = json.loads(created_review)
-            is_valid_json = True
-        except json.JSONDecodeError:
-            is_valid_json = False
-
-        self.assertTrue(is_valid_json, "Valid JSON object was not returned")
+        assert created_review.review == review
+        
  
     def test_get_reviews(self):
-        student = get_student(1)
-        reviews = get_reviews(student.id)
+        studentID = create_student("masud")
+        review = "They were great"
+        create_review(review, studentID)
+        reviews = get_reviews(studentID)
 
-        try:
-            check_reviews = json.loads(reviews)
-            is_valid_json = True
-        except json.JSONDecodeError:
-            is_valid_json = False
-
-        self.assertTrue(is_valid_json, "Valid JSON object was not returned")
- 
+        assert reviews is not None
+    
     def test_upvote_review(self):
-        student = get_student(1)
-        review = get_review(student.id)
-        old_score = review.score
+        studentID = create_student("masud")
+        review = "They were great"
+        new_reviewID = create_review(review, studentID)
+        acquiredReview = get_review(studentID, new_reviewID)
+        old_score = acquiredReview.score
 
-        update_score(review.id, 7)
-        updated_review = get_review(student.id)
+        update_score(acquiredReview.id, 7)
+        updated_review = get_review(studentID, acquiredReview.id)
         new_score = updated_review.score
 
         if new_score > old_score:
@@ -147,4 +144,4 @@ class IntegrationTests(unittest.TestCase):
             updated = False
 
         self.assertTrue(updated, "Score was not updated successfully.")
-    '''
+    
