@@ -57,7 +57,8 @@ Test Commands
 
 test = AppGroup('test', help='Testing commands') 
 
-@test.command("user", help="Run User tests")
+# Renamed the command name, kept argument
+@test.command("tests", help="Run tests")
 @click.argument("type", default="all")
 def user_tests_command(type):
     if type == "unit":
